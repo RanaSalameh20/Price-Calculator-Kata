@@ -5,3 +5,10 @@ C:\Users\ranav\source\repos\Price Calculator\obj\Debug\Price Calculator.csproj.A
 C:\Users\ranav\source\repos\Price Calculator\obj\Debug\Price Calculator.csproj.CoreCompileInputs.cache
 C:\Users\ranav\source\repos\Price Calculator\obj\Debug\Price Calculator.exe
 C:\Users\ranav\source\repos\Price Calculator\obj\Debug\Price Calculator.pdb
+C:\Users\ranav\Desktop\Price-Calculator-Kata\Price Calculator\bin\Debug\Price Calculator.exe.config
+C:\Users\ranav\Desktop\Price-Calculator-Kata\Price Calculator\bin\Debug\Price Calculator.exe
+C:\Users\ranav\Desktop\Price-Calculator-Kata\Price Calculator\bin\Debug\Price Calculator.pdb
+C:\Users\ranav\Desktop\Price-Calculator-Kata\Price Calculator\obj\Debug\Price Calculator.csproj.AssemblyReference.cache
+C:\Users\ranav\Desktop\Price-Calculator-Kata\Price Calculator\obj\Debug\Price Calculator.csproj.CoreCompileInputs.cache
+C:\Users\ranav\Desktop\Price-Calculator-Kata\Price Calculator\obj\Debug\Price Calculator.exe
+C:\Users\ranav\Desktop\Price-Calculator-Kata\Price Calculator\obj\Debug\Price Calculator.pdb

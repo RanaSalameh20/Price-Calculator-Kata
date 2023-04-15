@@ -19,48 +19,60 @@ namespace Price_Calculator
             set => _price = decimal.Round(value, 2);
         }
 
-        public decimal TAX { get; set; }
+        public static decimal TAX { get; set; } = 20;
+        public static decimal Discount { get; set; } = 0;
+
 
         public Product(string name, int uPC, decimal price)
         {
             Name = name;
             UPC = uPC;
-            Price = price;
-            TAX = 20;
+            Price = price;   
         }
-
-        public Product(string name, int uPC, decimal price, decimal tAX)
-        {
-            Name = name;
-            UPC = uPC;
-            Price = price;
-            TAX = tAX;
-        }
-
+       
         public override string ToString()
         {
             return $"Product: {Name}, (UPC: {UPC}) , Base price: {Price:C2}";
         }
 
-        public decimal PriceWithTax(decimal taxPercentage)
+        private decimal PriceCalculation(decimal Percentage)
         {
-
-            decimal taxAmount = Price * (taxPercentage / 100);
-            decimal totalPrice = Price + taxAmount;
+            decimal amount = Price * (Percentage / 100);
+            decimal totalPrice = Price + amount;
             return decimal.Round(totalPrice, 2);
 
         }
 
         public void ProductWithFlatRateTax()
         {
-            ProductWithCalculatedTax(TAX);
+            ProductWithCalculatedTax(TAX); // This TAX Value for All Product
         }
+
+       
         public void ProductWithCalculatedTax(decimal taxPercentage)
         {
-            decimal totalPrice = PriceWithTax(taxPercentage);
+            decimal totalPrice = PriceCalculation(taxPercentage);
             Console.WriteLine($" Product price reported as ${Price }  before tax " +
                          $"and ${totalPrice} after {taxPercentage}% tax.");
         }
 
+        public void ProductWithFlatRateTaxAndDiscount()
+        {
+            ProductWithCalculatedTaxAndDiscount(TAX, Discount);  // these Values for All Products
+        }
+
+        public void ProductWithCalculatedDiscount(decimal discountPercentage)
+        {
+            ProductWithCalculatedTaxAndDiscount(TAX, discountPercentage); 
+        }
+        public void ProductWithCalculatedTaxAndDiscount(decimal taxPercentage, decimal discountPercentage)
+        {
+            decimal pricewithTax = PriceCalculation(taxPercentage);
+            decimal priceWithDiscount= PriceCalculation(discountPercentage);
+            decimal totalPrice = pricewithTax - priceWithDiscount + Price;
+
+            Console.WriteLine($" Product price reported as ${Price }  before tax and discount " +
+                         $"and ${totalPrice} after {taxPercentage}% tax and {discountPercentage}% discount.");
+        }
     }
 }
