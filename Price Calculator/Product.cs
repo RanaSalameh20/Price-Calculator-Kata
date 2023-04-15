@@ -15,8 +15,11 @@ namespace Price_Calculator
             set => _price = decimal.Round(value, 2);
         }
 
-        public static decimal TAX { get; set; } = 20;
+        public static decimal Tax { get; set; } = 20;
         public static decimal Discount { get; set; } = 0;
+
+        private static decimal UPCDiscount { get; set; } = 0;  // Percentage 
+        private static int DiscountedUPC { get; set; } = 0;  // applied for this UPC only
 
 
         public Product(string name, int uPC, decimal price)
@@ -26,11 +29,11 @@ namespace Price_Calculator
             Price = price;
         }
 
+
         public override string ToString()
         {
             return $"Product: {Name}, (UPC: {UPC}) , Base price: {Price:C2}";
         }
-
         private decimal PriceCalculation(decimal percentage)
         {
             decimal amount = Amount(percentage);
@@ -42,28 +45,23 @@ namespace Price_Calculator
         {
             return (Price * (percentage / 100));
         }
-
         public void ProductWithFlatRateTax()
         {
-            ProductWithCalculatedTax(TAX); // This TAX Value for All Product
+            ProductWithCalculatedTax(Tax); // This TAX Value for All Product
         }
-
-
         public void ProductWithCalculatedTax(decimal taxPercentage)
         {
             decimal totalPrice = PriceCalculation(taxPercentage);
             Console.WriteLine($" Product price reported as ${Price }  before tax " +
                          $"and ${totalPrice} after {taxPercentage}% tax.");
         }
-
         public void ProductWithFlatRateTaxAndDiscount()
         {
-            ProductWithCalculatedTaxAndDiscount(TAX, Discount);  // these Values for All Products
+            ProductWithCalculatedTaxAndDiscount(Tax, Discount);  // these Values for All Products
         }
-
         public void ProductWithCalculatedDiscount(decimal discountPercentage)
         {
-            ProductWithCalculatedTaxAndDiscount(TAX, discountPercentage);
+            ProductWithCalculatedTaxAndDiscount(Tax, discountPercentage);
         }
         public void ProductWithCalculatedTaxAndDiscount(decimal taxPercentage, decimal discountPercentage)
         {
@@ -79,16 +77,35 @@ namespace Price_Calculator
 
             if (Discount == 0)
             {
-                ProductWithCalculatedTax(TAX);
+                ProductWithCalculatedTax(Tax);
                 return;
             }
 
-            ProductWithCalculatedTaxAndDiscount(TAX, Discount);
+            if (UPC == DiscountedUPC)
+            {
+                DisplyFullInformation(UPCDiscount);
+                return;
+            }
 
-            decimal discountAmount = Amount(Discount);
-            discountAmount = decimal.Round(discountAmount, 2);
-            Console.WriteLine($" The discount amount is ${discountAmount}");
+            DisplyFullInformation(0);
 
         }
+
+        private void DisplyFullInformation(decimal uPCDiscount )
+        {
+            ProductWithCalculatedTaxAndDiscount(Tax, Discount + uPCDiscount);
+
+            decimal totalDiscountAmount = Amount(Discount + uPCDiscount);
+            totalDiscountAmount = decimal.Round(totalDiscountAmount, 2);
+            Console.WriteLine($" The total discount amount is ${totalDiscountAmount}");
+        }
+
+        public static void AddUPCDiscount(int discountedUPC , decimal uPCDiscountPercentage)
+        {
+            DiscountedUPC = discountedUPC;
+            UPCDiscount = uPCDiscountPercentage;
+        }
+
+
     }
 }
