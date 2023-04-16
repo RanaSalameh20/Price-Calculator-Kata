@@ -45,16 +45,24 @@ namespace Price_Calculator
             //Console.WriteLine("");
 
 
-            // Requerement 5
-            Console.WriteLine("Requerement 5 ");
-            Product.Tax = 20;
-            Product.Discount = 15;
-            Product.AddUPCDiscount(12345, 7);
-            Product product3 = new Product("The Little Prince", 12345, 20.25m);
-            //product3.Reoprt();
-            Console.WriteLine("");
-            product3.Reoprt(Product.DiscountType.BeforeTax);
+            //// Requerement 5
+            //Console.WriteLine("Requerement 5 ");
+           // Product.Tax = 20;
+            //Product.Discount = 15;
+           // Product.AddUPCDiscount(12345, 7);
+            //Product product3 = new Product("The Little Prince", 12345, 20.25m);
+            ////product3.Reoprt();
+            //Console.WriteLine("");
+            //product3.Reoprt(Product.DiscountType.BeforeTax);
 
+            // Requerement 6
+            Console.WriteLine("Requerement 6 ");
+            Product.Tax = 21;
+            Product product4 = new Product("The Little Prince", 12345, 20.25m);
+            //product4.AddExpense("Packaging", 1, true);
+            //product4.AddExpense("Transport", 2.2m);
+            product4.ReoprtWithCosts();
+            Console.WriteLine("");
 
         }
     }
