@@ -45,7 +45,7 @@
   <ItemGroup>
     <Compile Include="Expense.cs" />
     <Compile Include="Product.cs" />
-    <Compile Include="ProductDemo.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

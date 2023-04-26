@@ -10,12 +10,17 @@ namespace Price_Calculator
             AfterTax,
             BeforeTax
         }
+        public enum DiscountMethod
+        {
+            Additive,
+            Multiplicative
+        }
 
         public string Name { get; set; }
         public int UPC { get; set; }
 
         public decimal Price { get; set; }
-        
+
 
         public static decimal Tax { get; set; } = 20;
         public static decimal Discount { get; set; } = 0;
@@ -38,10 +43,11 @@ namespace Price_Calculator
             return $"Product: {Name}, (UPC: {UPC}) , Base price: {Price:C2}";
         }
 
-     
+
         private decimal Amount(decimal percentage)
         {
-            return (Price * (percentage / 100));
+            var amount =  (Price * (percentage / 100));
+            return decimal.Round(amount, 2);
         }
         public void ProductWithFlatRateTax()
         {
@@ -84,7 +90,7 @@ namespace Price_Calculator
             Console.WriteLine($" Product price reported as ${Price }  before tax and discount " +
                          $"and ${totalPrice} after {taxPercentage}% tax and {discountPercentage}% discount.");
         }
-  
+
         public void Reoprt(DiscountType discountType = DiscountType.AfterTax)
         {
 
@@ -154,31 +160,36 @@ namespace Price_Calculator
             Expenses.Add(expense);
         }
 
-        public void ReoprtWithCosts()
+        public void ReoprtWithCosts(DiscountMethod discountMethod = DiscountMethod.Additive)
         {
             decimal totalCost = Price;
-            Console.WriteLine($"Cost = {Price}");
             decimal taxAmount = Amount(Tax);
-            Console.WriteLine($"Tax = {taxAmount:C2}");
             totalCost += taxAmount;
 
-            decimal discountAmount = 0;
+            
+            decimal discountAmount1 = Amount(Discount);
+            decimal discountAmount2 = 0;
+
             if (UPC == DiscountedUPC && UPCDiscount > 0)
             {
-                discountAmount = Amount(Discount + UPCDiscount);
-                Console.WriteLine($"Discounts = {discountAmount:C2}");
-            }
-            else if (Discount > 0)
-            {
-                discountAmount = Amount(Discount);
-                Console.WriteLine($"Discounts = {discountAmount:C2}");
-            }
-            totalCost -= discountAmount;
+                if (discountMethod == DiscountMethod.Multiplicative)
+                {
+                    discountAmount2 = (Price - discountAmount1) * UPCDiscount / 100;
+                    discountAmount2 = decimal.Round(discountAmount2, 2);
+                }
+                else
+                {
+                     discountAmount2= Amount(UPCDiscount);
 
+                }
+
+            }
+            decimal totalDiscountAmount = discountAmount1 + discountAmount2;
+
+            totalCost -= totalDiscountAmount;
             totalCost = CalculateExpenses(totalCost);
 
-            Console.WriteLine($"TOTAl Costs = {totalCost:C2}");
-            Console.WriteLine($"TOTAl Discounts = {discountAmount:C2}");
+            DisplyPriceInformation(taxAmount, totalDiscountAmount, totalCost);
         }
 
         private decimal CalculateExpenses(decimal totalCost)
@@ -186,11 +197,26 @@ namespace Price_Calculator
             foreach (var expense in Expenses)
             {
                 decimal expenseAmount = expense.IsPercentage ? Amount(expense.AmountValue) : expense.AmountValue;
-                Console.WriteLine($"{expense.Description} =  {expenseAmount:C2}");
                 totalCost += expenseAmount;
             }
 
             return totalCost;
         }
+        private void DisplyPriceInformation(decimal taxAmount , decimal discountAmount , decimal totalCost)
+        {
+            Console.WriteLine($"Cost = ${Price}");
+            Console.WriteLine($"Tax = {taxAmount:C2}");
+            Console.WriteLine($"Discounts = {discountAmount:C2}");
+            foreach (var expense in Expenses)
+            {
+                decimal expenseAmount = expense.IsPercentage ? Amount(expense.AmountValue) : expense.AmountValue;
+                Console.WriteLine($"{expense.Description} =  {expenseAmount:C2}");
+            }
+            Console.WriteLine($"TOTAl Costs = {totalCost:C2}");
+            Console.WriteLine($"TOTAl Discounts = {discountAmount:C2}");
+
+        }
+
+        
     }
 }

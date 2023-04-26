@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace Price_Calculator
 {
-    class ProductDemo
+    class Program
     {
         static void Main(string[] args)
         {
@@ -47,22 +48,26 @@ namespace Price_Calculator
 
             //// Requerement 5
             //Console.WriteLine("Requerement 5 ");
-           // Product.Tax = 20;
+            // Product.Tax = 20;
             //Product.Discount = 15;
-           // Product.AddUPCDiscount(12345, 7);
+            // Product.AddUPCDiscount(12345, 7);
             //Product product3 = new Product("The Little Prince", 12345, 20.25m);
             ////product3.Reoprt();
             //Console.WriteLine("");
             //product3.Reoprt(Product.DiscountType.BeforeTax);
 
-            // Requerement 6
+            // Requerement 6 & 7
+            Product product4 = new Product("The Little Prince", 12345, 20.25m);
             Console.WriteLine("Requerement 6 ");
             Product.Tax = 21;
-            Product product4 = new Product("The Little Prince", 12345, 20.25m);
-            //product4.AddExpense("Packaging", 1, true);
-            //product4.AddExpense("Transport", 2.2m);
+            Product.Discount = 15;
+            Product.AddUPCDiscount(12345, 7);
+            product4.AddExpense("Packaging", 1, true);
+            product4.AddExpense("Transport", 2.2m);
             product4.ReoprtWithCosts();
             Console.WriteLine("");
+            Console.WriteLine("Requerement 7 ");
+            product4.ReoprtWithCosts(Product.DiscountMethod.Multiplicative);
 
         }
     }
