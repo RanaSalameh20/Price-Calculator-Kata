@@ -1,4 +1,6 @@
-﻿namespace Price_Calculator
+﻿using System.Collections.Generic;
+
+namespace Price_Calculator
 {
     public class Expense
     {
@@ -12,19 +14,7 @@
             AmountValue = decimal.Round(amountValue, 2);
             IsPercentage = isPercentage;
         }
-
        
 
-        public string AmountDisplay()
-        {
-            if (IsPercentage)
-            {
-                return $"{AmountValue}%";
-            }
-            else
-            {
-                return $"{AmountValue:C2}";
-            }
-        }
     }
 }
