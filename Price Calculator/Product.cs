@@ -36,8 +36,9 @@ namespace Price_Calculator
 
         private decimal CalculatePercentageAmountFromPrice(decimal percentage)
         {
-            var amount = (Price * (percentage / 100));
-            return decimal.Round(amount, 2);
+            var amount =  Price * (percentage / 100);
+            return Math.Floor(amount * 10000) / 10000;
+      
         }
         public void ProductWithFlatRateTax()
         {

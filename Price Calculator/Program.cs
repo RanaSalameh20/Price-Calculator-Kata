@@ -11,7 +11,7 @@ namespace Price_Calculator
     {
         static void Main(string[] args)
         {
-            //// Requerement 1 
+            // Requerement 1 
             Console.WriteLine("Requerement 1 ");
             Product product1 = new Product("The Little Prince", 12345, 20.25m);
             Console.WriteLine(product1.ToString());
@@ -19,14 +19,14 @@ namespace Price_Calculator
             product1.ProductWithCalculatedTax(21);
             Console.WriteLine("");
 
-            //// Requerement 2
+            // Requerement 2
             Console.WriteLine("Requerement 2 ");
             product1.ProductWithCalculatedDiscount(15);
             product1.ProductWithCalculatedTaxAndDiscount(21, 15);
             Console.WriteLine("");
 
 
-            //// Requerement 3
+            // Requerement 3
             Console.WriteLine("Requerement 3 ");
             product1.Reoprt();
             Console.WriteLine("");
@@ -34,7 +34,7 @@ namespace Price_Calculator
             product1.Reoprt();
             Console.WriteLine("");
 
-            //// Requerement 4
+            //Requerement 4
             Console.WriteLine("Requerement 4 ");
             DiscountInformation.AddUPCDiscount(12345, 7);
             product1.Reoprt();
@@ -46,7 +46,7 @@ namespace Price_Calculator
             Console.WriteLine("");
 
 
-            //// Requerement 5
+            // Requerement 5
             Console.WriteLine("Requerement 5 ");
             Product product3 = new Product("The Little Prince", 12345, 20.25m);
 
@@ -84,6 +84,14 @@ namespace Price_Calculator
             Product product5 = new Product("The Little Prince", 12345678, 20.25m , "GBP");
             DiscountInformation.Discount =0;
             product5.ReoprtWithCosts();
+            Console.WriteLine("");
+
+            // Requerement 10 
+            Console.WriteLine("Requerement 10");
+            Product product6 = new Product("The Little Prince", 12345, 20.25m);
+            DiscountInformation.Discount = 15;
+            product6.AddExpense("Transport", 3 , true);
+            product6.ReoprtWithCosts(DiscountInformation.DiscountMethod.Multiplicative);
 
         }
     }
