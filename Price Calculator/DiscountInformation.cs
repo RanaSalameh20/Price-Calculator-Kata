@@ -19,7 +19,7 @@ namespace Price_Calculator
             Additive,
             Multiplicative
         }
-        public static decimal Discount { get; set; } = 0;
+        public static decimal Discount { get; set; }
         public static decimal UPCDiscount { get; set; } = 0;  // Percentage 
         public static int DiscountedUPC { get; set; } = 0;  // applied for this UPC only
 
