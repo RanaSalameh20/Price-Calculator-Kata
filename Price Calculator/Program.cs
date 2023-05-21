@@ -61,6 +61,7 @@ namespace Price_Calculator
 
             // Requerement 6 & 7 & 8 
             Product product4 = new Product("The Little Prince", 12345, 20.25m);
+
             Console.WriteLine("Requerement 6 ");
             Product.Tax = 21;
             DiscountInformation.Discount = 15;
@@ -80,19 +81,19 @@ namespace Price_Calculator
             product4.ReoprtWithCosts();
             Console.WriteLine("");
 
-            // Requerement 9
-            Console.WriteLine("Requerement 9 ");
-            Product product5 = new Product("The Little Prince", 12345678, 20.25m, "GBP");
-            DiscountInformation.Discount = 0;
-            product5.ReoprtWithCosts();
-            Console.WriteLine("");
+            //// Requerement 9
+            //Console.WriteLine("Requerement 9 ");
+            //Product product5 = new Product("The Little Prince", 12345678, 20.25m, "GBP");
+            //DiscountInformation.Discount = 0;
+            //product5.ReoprtWithCosts();
+            //Console.WriteLine("");
 
-            // Requerement 10 
-            Console.WriteLine("Requerement 10");
-            Product product6 = new Product("The Little Prince", 12345, 20.25m);
-            DiscountInformation.Discount = 15;
-            product6.AddExpense("Transport", 3, true);
-            product6.ReoprtWithCosts(DiscountInformation.DiscountMethod.Multiplicative);
+            //// Requerement 10 
+            //Console.WriteLine("Requerement 10");
+            //Product product6 = new Product("The Little Prince", 12345, 20.25m);
+            //DiscountInformation.Discount = 15;
+            //product6.AddExpense("Transport", 3, true);
+            //product6.ReoprtWithCosts(DiscountInformation.DiscountMethod.Multiplicative);
 
         }
     }

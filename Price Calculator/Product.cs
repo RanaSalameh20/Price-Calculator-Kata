@@ -203,7 +203,7 @@ namespace Price_Calculator
             totalCost -= totalDiscountAmount;
             totalCost = CalculateExpenses(totalCost);
 
-            DisplyPriceInformation(taxAmount, totalDiscountAmount, totalCost);
+            PrintDetailedPriceInformation(taxAmount, totalDiscountAmount, totalCost);
         }
 
         private decimal CalculateExpenses(decimal totalCost)
@@ -217,17 +217,19 @@ namespace Price_Calculator
             return totalCost;
         }
 
-        private void DisplyPriceInformation(decimal taxAmount , decimal discountAmount , decimal totalCost)
+        private void PrintDetailedPriceInformation(decimal taxAmount , decimal discountAmount , decimal totalCost)
         {
             Console.WriteLine($"Cost = {Price} {Currency}");
-            Console.WriteLine($"Tax = {taxAmount:0.00} {Currency}");
-            Console.WriteLine($"Discounts = {discountAmount:0.00} {Currency}");
+            Console.WriteLine($"Tax = {taxAmount} {Currency}");
+            Console.WriteLine($"Discounts = {discountAmount} {Currency}");
             foreach (var expense in Expenses)
             {
                 decimal expenseAmount = expense.IsPercentage ? CalculatePercentageAmountFromPrice(expense.AmountValue) : expense.AmountValue;
-                Console.WriteLine($"{expense.Description} =  {expenseAmount:0.00} {Currency}");
+                expenseAmount = decimal.Round(expenseAmount, 2);
+                Console.WriteLine($"{expense.Description} =  {expenseAmount} {Currency}");
             }
-            Console.WriteLine($"TOTAl Costs = {totalCost:0.00} {Currency}");
+            totalCost = decimal.Round(totalCost, 2);
+            Console.WriteLine($"TOTAl Costs = {totalCost} {Currency}");
           
             DisplyTotalDiscountAmount(discountAmount);
         }
