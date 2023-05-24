@@ -10,8 +10,8 @@ namespace Price_Calculator
     {
 
         public static decimal Discount { get; set; }
-        public static UPCDiscount UPCDiscount { get; set; }
-        public static Cap Cap { get; set; }
+        public static UPCDiscount UPCDiscount { get; set; } = new UPCDiscount();
+        public static Cap Cap { get; set; } = new Cap();
 
         public static void SetCap(decimal capValue, bool isPercentage = false)
         {

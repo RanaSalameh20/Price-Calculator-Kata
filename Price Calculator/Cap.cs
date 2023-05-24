@@ -11,6 +11,10 @@ namespace Price_Calculator
         public  decimal Value { get; set; }
         public  bool IsCapPercentageValue { get; set; }
 
+        public Cap()
+        {
+
+        }
         public Cap(decimal value , bool isCapPercentageValue)
         {
             Value = value;

@@ -11,6 +11,10 @@ namespace Price_Calculator
         public decimal Value { get; set; }  // Percentage
         public int Code { get; set; }
 
+        public UPCDiscount()
+        {
+
+        }
         public UPCDiscount(decimal value, int code)
         {
             Value = value;
