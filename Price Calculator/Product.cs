@@ -95,11 +95,11 @@ namespace Price_Calculator
                 return;
             }
 
-            if (UPC == DiscountedUPC && UPCDiscount > 0)
+            if (UPC == DiscountInformation.UPCDiscount.Code && DiscountInformation.UPCDiscount.Value > 0)
             {
                 if (discountType == DiscountType.AfterTax)
                 {
-                    CalculateProductPriceWithCalculatedTaxAndDiscount(Tax, Discount + UPCDiscount);
+                    CalculateProductPriceWithCalculatedTaxAndDiscount(Tax, Discount + DiscountInformation.UPCDiscount.Value);
                 }
                 else if (discountType == DiscountType.BeforeTax)
                 {
@@ -118,9 +118,9 @@ namespace Price_Calculator
         private decimal CalculateTotalDiscountAmount()
         {
             decimal totalDiscountPercentage = Discount;
-            if(UPC == DiscountedUPC)
+            if(UPC == DiscountInformation.UPCDiscount.Code)
             {
-                totalDiscountPercentage += UPCDiscount;
+                totalDiscountPercentage += DiscountInformation.UPCDiscount.Value;
             }
             
             decimal totalDiscountAmount = CalculatePercentageAmountFromPrice(totalDiscountPercentage);
@@ -131,7 +131,7 @@ namespace Price_Calculator
         private void CalculateProductPricwithUPCDiscountBeforeTax()
         {
             decimal originalPrice = Price;
-            decimal uPCDiscountAmount = CalculatePercentageAmountFromPrice(UPCDiscount);
+            decimal uPCDiscountAmount = CalculatePercentageAmountFromPrice(DiscountInformation.UPCDiscount.Value);
 
             decimal discountedPrice = Price - uPCDiscountAmount;
             Price = discountedPrice;
@@ -169,28 +169,28 @@ namespace Price_Calculator
             decimal discountAmount1 = CalculatePercentageAmountFromPrice(Discount);
             decimal discountAmount2 = 0;
 
-            if (UPC == DiscountedUPC && UPCDiscount > 0)
+            if (UPC == DiscountInformation.UPCDiscount.Code && DiscountInformation.UPCDiscount.Value > 0)
             {
                 if (discountMethod == DiscountMethod.Multiplicative)
                 {
-                    discountAmount2 = (Price - discountAmount1) * UPCDiscount / 100;
+                    discountAmount2 = (Price - discountAmount1) * DiscountInformation.UPCDiscount.Value / 100;
                     discountAmount2 = decimal.Round(discountAmount2, 2);
                 }
                 else
                 {
-                     discountAmount2= CalculatePercentageAmountFromPrice(UPCDiscount);
+                     discountAmount2= CalculatePercentageAmountFromPrice( DiscountInformation.UPCDiscount.Value);
 
                 }
 
             }
             decimal totalDiscountAmount = discountAmount1 + discountAmount2;
 
-            if(discountMethod == DiscountMethod.Additive && Cap > 0 )
+            if(discountMethod == DiscountMethod.Additive && DiscountInformation.Cap.Value > 0 )
             {
-                decimal capAmount = DiscountInformation.Cap;
-                if (DiscountInformation.IsCapPercentageValue)
+                decimal capAmount = DiscountInformation.Cap.Value;
+                if (DiscountInformation.Cap.IsCapPercentageValue)
                 {
-                    capAmount = CalculatePercentageAmountFromPrice(DiscountInformation.Cap);
+                    capAmount = CalculatePercentageAmountFromPrice(DiscountInformation.Cap.Value);
                     capAmount = decimal.Round(capAmount, 2);
                 }
                 

@@ -43,11 +43,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cap.cs" />
     <Compile Include="DiscountInformation.cs" />
+    <Compile Include="DiscountMethod.cs" />
+    <Compile Include="DiscountType .cs" />
     <Compile Include="Expense.cs" />
     <Compile Include="Product.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UPCDiscount.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
