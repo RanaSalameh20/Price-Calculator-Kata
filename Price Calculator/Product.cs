@@ -32,54 +32,58 @@ namespace Price_Calculator
         {
             return $"Product: {Name}, (UPC: {UPC}) , Base price: {Price:C2}";
         }
+   
+        public void CalculateProducPricetWithFlatRateTax()
+        {
+            CalculateProductPriceWithTax(Tax); // This TAX Value for All Product
+        }
+        public void CalculateProductPriceWithTax(decimal taxPercentage)
+        {
+            decimal taxAmount = CalculatePercentageAmountFromPrice(taxPercentage);
+            decimal totalPrice = Price + taxAmount;
+            totalPrice = decimal.Round(totalPrice, 2);
+            DisplayProductPriceBeforeTaxAndDiscount();
+            DisplayProductPriceAfterTax(totalPrice, taxPercentage);
+        }
 
+        private void DisplayProductPriceBeforeTaxAndDiscount()
+        {
+            Console.WriteLine($"Product price reported as {Price} {Currency} before tax and Discount.");
+        }
+
+        private void DisplayProductPriceAfterTax(decimal totalPrice, decimal taxPercentage)
+        {
+            Console.WriteLine($"Product price reported as {totalPrice} {Currency} after {taxPercentage}% tax.");
+        }
+
+        public void CalculateProductPriceWithFlatRateTaxAndDiscount()
+        {
+            CalculateProductPriceWithCalculatedTaxAndDiscount(Tax, Discount);  // these Values for All Products
+        }
+        public void CalculateProducPricetWithCalculatedDiscount(decimal discountPercentage)
+        {
+            CalculateProductPriceWithCalculatedTaxAndDiscount(Tax, discountPercentage);  // flat tax but specific discount
+        }
+        public void CalculateProductPriceWithCalculatedTaxAndDiscount(decimal taxPercentage, decimal discountPercentage)
+        {
+            decimal taxAmount = CalculatePercentageAmountFromPrice(taxPercentage);
+            decimal discountAmount = CalculatePercentageAmountFromPrice(discountPercentage);
+            decimal totalPrice = Price + taxAmount - discountAmount;
+            totalPrice = decimal.Round(totalPrice, 2);
+            DisplayProductPriceBeforeTaxAndDiscount();
+            DisplayProductPriceAfterTaxAndDiscount(totalPrice , taxPercentage, discountPercentage);
+        }
 
         private decimal CalculatePercentageAmountFromPrice(decimal percentage)
         {
-            var amount =  Price * (percentage / 100);
+            var amount = Price * (percentage / 100);
             return Math.Floor(amount * 10000) / 10000;
-      
-        }
-        public void ProductWithFlatRateTax()
-        {
-            ProductWithCalculatedTax(Tax); // This TAX Value for All Product
-        }
-        public void ProductWithCalculatedTax(decimal taxPercentage)
-        {
-            decimal totalPrice = AddPriceToPercentage(taxPercentage);
-            Console.WriteLine($" Product price reported as {Price } {Currency}  before tax " +
-                         $"and {totalPrice} {Currency} after {taxPercentage}% tax.");
-        }
-        public void ProductWithFlatRateTaxAndDiscount()
-        {
-            ProductWithCalculatedTaxAndDiscount(Tax, Discount);  // these Values for All Products
-        }
-        public void ProductWithCalculatedDiscount(decimal discountPercentage)
-        {
-            ProductWithCalculatedTaxAndDiscount(Tax, discountPercentage);
-        }
-        public void ProductWithCalculatedTaxAndDiscount(decimal taxPercentage, decimal discountPercentage)
-        {
-            decimal pricewithTax = AddPriceToPercentage(taxPercentage);
-            decimal priceWithDiscount = AddPriceToPercentage(discountPercentage);
-            decimal totalPrice = pricewithTax - priceWithDiscount + Price;
-
-            Disply(taxPercentage, discountPercentage, totalPrice);
-        }
-
-
-        private decimal AddPriceToPercentage(decimal percentage)
-        {
-            decimal amount = CalculatePercentageAmountFromPrice(percentage);
-            decimal totalPrice = Price + amount;
-            return decimal.Round(totalPrice, 2);
 
         }
 
-        private void Disply(decimal taxPercentage, decimal discountPercentage, decimal totalPrice)
+        private void DisplayProductPriceAfterTaxAndDiscount(decimal totalPrice , decimal taxPercentage, decimal discountPercentage)
         {
-            Console.WriteLine($" Product price reported as {Price } {Currency} before tax and discount " +
-                         $"and {totalPrice} {Currency} after {taxPercentage}% tax and {discountPercentage}% discount.");
+            Console.WriteLine($"Product price reported as {totalPrice} {Currency} after {taxPercentage}% tax and {discountPercentage}% discount.");
         }
 
         public void Reoprt(DiscountType discountType = DiscountType.AfterTax)
@@ -87,31 +91,47 @@ namespace Price_Calculator
 
             if (Discount == 0)
             {
-                ProductWithCalculatedTax(Tax);
+                CalculateProductPriceWithTax(Tax);
                 return;
             }
 
-
-            if (UPC == DiscountedUPC && UPCDiscount > 0 && discountType == DiscountType.AfterTax)
+            if (UPC == DiscountInformation.UPCDiscount.Code && DiscountInformation.UPCDiscount.Value > 0)
             {
-                DisplyPriceWithUPCDiscountAfterTax(UPCDiscount);
-                return;
-
+                if (discountType == DiscountType.AfterTax)
+                {
+                    CalculateProductPriceWithCalculatedTaxAndDiscount(Tax, Discount + DiscountInformation.UPCDiscount.Value);
+                }
+                else if (discountType == DiscountType.BeforeTax)
+                {
+                    CalculateProductPricwithUPCDiscountBeforeTax();
+                }
             }
-            else if (UPC == DiscountedUPC && UPCDiscount > 0 && discountType == DiscountType.BeforeTax)
+            else
             {
-                DisplyPricwithUPCDiscountBeforeTax();
-                return;
+                CalculateProductPriceWithCalculatedTaxAndDiscount(Tax, Discount);
+                
             }
-
-            DisplyPriceWithUPCDiscountAfterTax(0);
-
+            var totalDiscountAmount = CalculateTotalDiscountAmount();
+            DisplyTotalDiscountAmount(totalDiscountAmount);
         }
 
-        private void DisplyPricwithUPCDiscountBeforeTax()
+        private decimal CalculateTotalDiscountAmount()
+        {
+            decimal totalDiscountPercentage = Discount;
+            if(UPC == DiscountInformation.UPCDiscount.Code)
+            {
+                totalDiscountPercentage += DiscountInformation.UPCDiscount.Value;
+            }
+            
+            decimal totalDiscountAmount = CalculatePercentageAmountFromPrice(totalDiscountPercentage);
+            totalDiscountAmount = decimal.Round(totalDiscountAmount, 2);
+            return totalDiscountAmount;
+        }
+
+        private void CalculateProductPricwithUPCDiscountBeforeTax()
         {
             decimal originalPrice = Price;
-            decimal uPCDiscountAmount = CalculatePercentageAmountFromPrice(UPCDiscount);
+            decimal uPCDiscountAmount = CalculatePercentageAmountFromPrice(DiscountInformation.UPCDiscount.Value);
 
             decimal discountedPrice = Price - uPCDiscountAmount;
             Price = discountedPrice;
@@ -119,30 +139,20 @@ namespace Price_Calculator
             decimal taxAmount = CalculatePercentageAmountFromPrice(Tax);
             decimal universalDiscountAmount = CalculatePercentageAmountFromPrice(Discount);
             Price = originalPrice;
+
             decimal totalPrice = Price - uPCDiscountAmount + taxAmount - universalDiscountAmount;
             totalPrice = decimal.Round(totalPrice, 2);
-            decimal totalDiscountAmount = uPCDiscountAmount + universalDiscountAmount;
-            totalDiscountAmount = decimal.Round(totalDiscountAmount, 2);
+       
 
-            Disply(Tax, Discount + UPCDiscount, totalPrice);
-
-            PrintTotalDiscountAmount(totalDiscountAmount);
+            DisplayProductPriceBeforeTaxAndDiscount();
+            DisplayProductPriceAfterTaxAndDiscount(totalPrice, Tax, Discount);
         }
 
-        private void PrintTotalDiscountAmount(decimal totalDiscountAmount)
+        private void DisplyTotalDiscountAmount(decimal totalDiscountAmount)
         {
             Console.WriteLine($"The Total Discount Amount Is {totalDiscountAmount:0.00} {Currency}");
         }
-
-        private void DisplyPriceWithUPCDiscountAfterTax(decimal uPCDiscount)
-        {
-            ProductWithCalculatedTaxAndDiscount(Tax, Discount + uPCDiscount);
-
-            decimal totalDiscountAmount = CalculatePercentageAmountFromPrice(Discount + uPCDiscount);
-            totalDiscountAmount = decimal.Round(totalDiscountAmount, 2);
-            PrintTotalDiscountAmount(totalDiscountAmount);
-        }
-
+        
         public void AddExpense(string description, decimal amount, bool isPercentage = false)
         {
             var expense = new Expense(description, amount, isPercentage);
@@ -159,28 +169,28 @@ namespace Price_Calculator
             decimal discountAmount1 = CalculatePercentageAmountFromPrice(Discount);
             decimal discountAmount2 = 0;
 
-            if (UPC == DiscountedUPC && UPCDiscount > 0)
+            if (UPC == DiscountInformation.UPCDiscount.Code && DiscountInformation.UPCDiscount.Value > 0)
             {
                 if (discountMethod == DiscountMethod.Multiplicative)
                 {
-                    discountAmount2 = (Price - discountAmount1) * UPCDiscount / 100;
+                    discountAmount2 = (Price - discountAmount1) * DiscountInformation.UPCDiscount.Value / 100;
                     discountAmount2 = decimal.Round(discountAmount2, 2);
                 }
                 else
                 {
-                     discountAmount2= CalculatePercentageAmountFromPrice(UPCDiscount);
+                     discountAmount2= CalculatePercentageAmountFromPrice( DiscountInformation.UPCDiscount.Value);
 
                 }
 
             }
             decimal totalDiscountAmount = discountAmount1 + discountAmount2;
 
-            if(discountMethod == DiscountMethod.Additive && Cap > 0 )
+            if(discountMethod == DiscountMethod.Additive && DiscountInformation.Cap.Value > 0 )
             {
-                decimal capAmount = DiscountInformation.Cap;
-                if (DiscountInformation.IsCapPercentageValue)
+                decimal capAmount = DiscountInformation.Cap.Value;
+                if (DiscountInformation.Cap.IsCapPercentageValue)
                 {
-                    capAmount = CalculatePercentageAmountFromPrice(DiscountInformation.Cap);
+                    capAmount = CalculatePercentageAmountFromPrice(DiscountInformation.Cap.Value);
                     capAmount = decimal.Round(capAmount, 2);
                 }
                 
@@ -193,7 +203,7 @@ namespace Price_Calculator
             totalCost -= totalDiscountAmount;
             totalCost = CalculateExpenses(totalCost);
 
-            DisplyPriceInformation(taxAmount, totalDiscountAmount, totalCost);
+            PrintDetailedPriceInformation(taxAmount, totalDiscountAmount, totalCost);
         }
 
         private decimal CalculateExpenses(decimal totalCost)
@@ -207,19 +217,21 @@ namespace Price_Calculator
             return totalCost;
         }
 
-        private void DisplyPriceInformation(decimal taxAmount , decimal discountAmount , decimal totalCost)
+        private void PrintDetailedPriceInformation(decimal taxAmount , decimal discountAmount , decimal totalCost)
         {
             Console.WriteLine($"Cost = {Price} {Currency}");
-            Console.WriteLine($"Tax = {taxAmount:0.00} {Currency}");
-            Console.WriteLine($"Discounts = {discountAmount:0.00} {Currency}");
+            Console.WriteLine($"Tax = {taxAmount} {Currency}");
+            Console.WriteLine($"Discounts = {discountAmount} {Currency}");
             foreach (var expense in Expenses)
             {
                 decimal expenseAmount = expense.IsPercentage ? CalculatePercentageAmountFromPrice(expense.AmountValue) : expense.AmountValue;
-                Console.WriteLine($"{expense.Description} =  {expenseAmount:0.00} {Currency}");
+                expenseAmount = decimal.Round(expenseAmount, 2);
+                Console.WriteLine($"{expense.Description} =  {expenseAmount} {Currency}");
             }
-            Console.WriteLine($"TOTAl Costs = {totalCost:0.00} {Currency}");
+            totalCost = decimal.Round(totalCost, 2);
+            Console.WriteLine($"TOTAl Costs = {totalCost} {Currency}");
           
-            PrintTotalDiscountAmount(discountAmount);
+            DisplyTotalDiscountAmount(discountAmount);
         }
 
         

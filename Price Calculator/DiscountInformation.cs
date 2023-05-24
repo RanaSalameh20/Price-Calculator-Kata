@@ -9,34 +9,19 @@ namespace Price_Calculator
     public class DiscountInformation
     {
 
-        public enum DiscountType
-        {
-            AfterTax,
-            BeforeTax
-        }
-        public enum DiscountMethod
-        {
-            Additive,
-            Multiplicative
-        }
-        public static decimal Discount { get; set; } = 0;
-        public static decimal UPCDiscount { get; set; } = 0;  // Percentage 
-        public static int DiscountedUPC { get; set; } = 0;  // applied for this UPC only
-
-        public static decimal Cap { get; set; }
-        public static bool IsCapPercentageValue { get; set; }
+        public static decimal Discount { get; set; }
+        public static UPCDiscount UPCDiscount { get; set; } = new UPCDiscount();
+        public static Cap Cap { get; set; } = new Cap();
 
         public static void SetCap(decimal capValue, bool isPercentage = false)
         {
-            Cap = capValue;
-            IsCapPercentageValue = isPercentage;
-            
+            Cap = new Cap(capValue, isPercentage);
+
         }
 
         public static void AddUPCDiscount(int discountedUPC, decimal uPCDiscountPercentage)
         {
-            DiscountedUPC = discountedUPC;
-            UPCDiscount = uPCDiscountPercentage;
+            UPCDiscount = new UPCDiscount(uPCDiscountPercentage, discountedUPC);
         }
 
         
